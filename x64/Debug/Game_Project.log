@@ -1,14 +1,5 @@
-﻿  Game.cpp
-D:\CPlusFiles\SDL3_Game1\Project1\Game_Project\Game_Project\ECS\ECS.h(108,37): warning C4244: аргумент: преобразование "_Ty" в "float", возможна потеря данных
-          with
-          [
-              _Ty=int
-          ]
-D:\CPlusFiles\SDL3_Game1\Project1\Game_Project\Game_Project\Game.cpp(49,8): message : выполняется компиляция ссылки на экземпляр шаблон функции "T &Entity::AddComponent<TransformComponent,int,int>(int &&,int &&)"
-          with
-          [
-              T=TransformComponent
-          ]
+﻿  MovementComponent.cpp
+D:\CPlusFiles\SDL3_Game1\Project1\Game_Project\Game_Project\ECS\Components\MovementComponent.cpp(36,73): warning C4244: аргумент: преобразование "double" в "const float", возможна потеря данных
   Game_Project.vcxproj -> D:\CPlusFiles\SDL3_Game1\Project1\Game_Project\x64\Debug\Game_Project.exe
   "pwsh.exe" не является внутренней или внешней
   командой, исполняемой программой или пакетным файлом.

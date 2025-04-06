@@ -20,8 +20,6 @@ public:
     void SetSourceRect(const SDL_FRect& src_rect);
     void SetColor(const SDL_Color& color);
     void SetFlipMode(const SDL_FlipMode& flip_mode);
-    void SetScale(double scaleX, double scaleY);
-    void SetScale(double scale);
     void SetVisible(bool is_visible);
 
     bool IsVisible();
@@ -30,7 +28,6 @@ public:
     TransformComponent* transform = nullptr;
     SDL_Texture* texture = nullptr;
 
-    double scaleX = 1.0, scaleY = 1.0;
     SDL_FRect src_rect = { 0, 0, 0, 0 };
     SDL_Color color = { 255, 255, 255, 255 };
     SDL_FlipMode flip_mode = SDL_FLIP_NONE;

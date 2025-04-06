@@ -45,12 +45,19 @@ bool Game::Init(const char* window_title, const int xpos, const int ypos, const 
 	// ECS setup	START
 	this->entity_manager = new EntityManager();
 
-	Entity& entity = entity_manager->CreateEntity();
-	entity.AddComponent<TransformComponent>(32, 32);
-	entity.AddComponent<SpriteComponent>().LoadTexture("./Assets/Sprites/CharactersSpritesheet.png").SetSourceRect({32 * 6,32 * 6,32,32});
-
-	SpriteComponent& sprite_component = entity.GetComponent<SpriteComponent>();
-	sprite_component.SetScale(0.3);
+	Entity& player_entity = entity_manager->CreateEntity();
+	player_entity.AddComponent<TransformComponent>().SetScaleMultiplier(0.3);
+	player_entity.AddComponent<SpriteComponent>().LoadTexture("./Assets/Sprites/CharactersSpritesheet.png").SetSourceRect({ 32 * 6,32 * 6,32,32 });
+	player_entity.AddComponent<MovementComponent>(175);
+	player_entity.AddComponent<ColliderComponent>("PlayerCollider");
+	SpriteComponent& player_sprite_component = player_entity.GetComponent<SpriteComponent>();
+		
+	Entity& enemy_entity = entity_manager->CreateEntity();
+	enemy_entity.AddComponent<TransformComponent>().SetScaleMultiplier(0.3);
+	enemy_entity.GetComponent<TransformComponent>().SetPosition(200, 100);
+	enemy_entity.AddComponent<SpriteComponent>().LoadTexture("./Assets/Sprites/CharactersSpritesheet.png").SetSourceRect({ 32 * 6,32 * 13,32,32 });
+	enemy_entity.AddComponent<ColliderComponent>("EnemyCollider");
+	SpriteComponent& enemy_sprite_component = enemy_entity.GetComponent<SpriteComponent>();
 
 	// ECS setup	END
 	return true;

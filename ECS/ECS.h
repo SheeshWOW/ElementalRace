@@ -64,6 +64,9 @@ public:
     template <typename T>
     bool HasComponent() const;
 
+    template <typename... TComponents>
+    bool HasAllComponents() const;
+
     template <typename T, typename... TArgs>
     T& AddComponent(TArgs&&... mArgs);
 
@@ -90,6 +93,7 @@ public:
     void Refresh();
 
     Entity& CreateEntity();
+    template<typename... TComponents> std::vector<Entity*> GetEntitiesWith();
 
 private:
     std::vector<std::unique_ptr<Entity>> entities;
@@ -99,6 +103,11 @@ private:
 template<typename T>
 bool Entity::HasComponent() const {
     return this->component_bitset[GetComponentTypeID<T>()];
+}
+
+template <typename... TComponents>
+bool Entity::HasAllComponents() const {
+    return (HasComponent<TComponents>() && ...);
 }
 
 template<typename T, typename ...TArgs>
@@ -123,4 +132,18 @@ T& Entity::GetComponent() const {
     assert(HasComponent<T>());
     auto ptr = component_array[GetComponentTypeID<T>()];
     return *static_cast<T*>(ptr); // Лучше static_cast, чем reinterpret_cast
+}
+
+template<typename ...TComponents>
+inline std::vector<Entity*> EntityManager::GetEntitiesWith()
+{
+    std::vector<Entity*> result_vec;
+
+    for (auto& entity : entities) {
+        if (entity->HasAllComponents<TComponents...>()) {
+            result_vec.push_back(entity.get());
+        }
+    }
+
+    return result_vec;
 }

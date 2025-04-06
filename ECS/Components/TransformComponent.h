@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../ECS.h"
 #include <SDL3/SDL.h>
+#include "../ECS.h"
 #include "../../BasicTypes.h"
 
 class TransformComponent : public Component
@@ -11,7 +11,7 @@ public:
 	TransformComponent();
 	TransformComponent(float width, float height, float xpos=0, float ypos=0, float rotation=0);
 
-	SDL_FRect GetTransformRect();
+	SDL_FRect GetTransformFRect();
 
 	void Translate(float x, float y);
 	void Translate(Vector2D vec);
@@ -25,11 +25,17 @@ public:
 	void SetScale(float x, float y);
 	void SetScale(Vector2D vec);
 
+	void SetScaleMultiplier(Vector2D vec_multiplier);
+	void SetScaleMultiplier(float scale_multiplier);
+
 	void SetRotation(float rotation);
 
 	// Attributes
 	Vector2D position;
 	Vector2D scale;
+	Vector2D scale_multiplier;
+	
+	Vector2D velocity;
 
 	float rotation = 0;
 };
