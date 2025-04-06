@@ -1,14 +1,4 @@
 ﻿  ECS.cpp
-  main.cpp
-D:\CPlusFiles\SDL3_Game1\Project1\Game_Project\Game_Project\main.cpp(44,22): warning C4244: аргумент: преобразование "Uint64" в "Uint32", возможна потеря данных
-  Sprite.cpp
-D:\CPlusFiles\SDL3_Game1\Project1\Game_Project\Game_Project\Sprite.cpp(47,84): warning C4838: Преобразование из "double" в "float" требует сужающего преобразования.
-D:\CPlusFiles\SDL3_Game1\Project1\Game_Project\Game_Project\Sprite.cpp(47,84): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
-D:\CPlusFiles\SDL3_Game1\Project1\Game_Project\Game_Project\Sprite.cpp(47,111): warning C4838: Преобразование из "double" в "float" требует сужающего преобразования.
-D:\CPlusFiles\SDL3_Game1\Project1\Game_Project\Game_Project\Sprite.cpp(47,111): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
-D:\CPlusFiles\SDL3_Game1\Project1\Game_Project\Game_Project\Sprite.cpp(75,21): warning C4244: =: преобразование "double" в "float", возможна потеря данных
-D:\CPlusFiles\SDL3_Game1\Project1\Game_Project\Game_Project\Sprite.cpp(76,21): warning C4244: =: преобразование "double" в "float", возможна потеря данных
-  Создание кода...
   Game_Project.vcxproj -> D:\CPlusFiles\SDL3_Game1\Project1\Game_Project\x64\Debug\Game_Project.exe
   "pwsh.exe" не является внутренней или внешней
   командой, исполняемой программой или пакетным файлом.

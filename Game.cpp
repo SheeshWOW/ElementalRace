@@ -1,16 +1,29 @@
 #include "Game.h"
 #include "SDL3_image/SDL_image.h"
 #include "Sprite.h"
+#include "ECS.h"
 
 Sprite* test_sprite;
 
 SDL_Renderer* Game::renderer = nullptr;
+EntityManager* Game::entity_manager = nullptr;
+
 Game::Game()
 {
+	this->entity_manager = new EntityManager();
+
+	Entity& entity = entity_manager->CreateEntity();
+	SDL_Log("Entity is alive: %d", entity.IsAlive());
+	SDL_Log("CounterComponent_ID: %d", GetComponentTypeID<CounterComponent>());
+	SDL_Log("KillComponent_ID: %d", GetComponentTypeID<KillComponent>());
+	
+	entity.AddComponent<CounterComponent>();
+	entity.AddComponent<KillComponent>();
 }
 
 Game::~Game()
 {
+	delete this->entity_manager;
 }
 
 bool Game::Init(const char* window_title, const int xpos, const int ypos, const int width, const int height)
@@ -85,13 +98,17 @@ SDL_AppResult Game::HandleEvent(SDL_Event* event)
 
 SDL_AppResult Game::Update()
 {
+	// Calculate delta_time
 	this->delta_time = (SDL_GetTicks() - last_tick) / 1000.0;
 	last_tick = SDL_GetTicks();
 
+	// Update all entities
+	this->entity_manager->Refresh();
+	this->entity_manager->Update(this->delta_time);
+	
 	test_sprite->Update(this->delta_time);
 
-	SDL_Log("FPS: %lf", 1/this->delta_time);
-
+	//SDL_Log("FPS: %lf", 1/this->delta_time);
 	return SDL_APP_CONTINUE;
 }
 
@@ -100,6 +117,7 @@ SDL_AppResult Game::Render()
 	SDL_SetRenderDrawColor(this->renderer, 37, 37, 144, 255);
 	SDL_RenderClear(this->renderer);
 
+	this->entity_manager->Render();
 	test_sprite->Render();
 
 	SDL_RenderPresent(this->renderer);

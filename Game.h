@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SDL3/SDL.h"
+#include "ECS.h"
 
 static const char* DEFAULT_TITLE = "SDL3 Game";
 static const int DEFAULT_XPOS = 200;
@@ -29,6 +30,7 @@ public:
 
 	// Attributes
 	static SDL_Renderer* renderer;
+	static EntityManager* entity_manager;
 
 private:
 	// Methods
