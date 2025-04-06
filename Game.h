@@ -1,7 +1,7 @@
 #pragma once
 
 #include "SDL3/SDL.h"
-#include "ECS.h"
+#include "ECS/ECS.h"
 
 static const char* DEFAULT_TITLE = "SDL3 Game";
 static const int DEFAULT_XPOS = 200;

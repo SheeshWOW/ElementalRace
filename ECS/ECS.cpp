@@ -1,6 +1,10 @@
 #include "ECS.h"
 #include "SDL3/SDL.h"
 
+EntityManager::~EntityManager()
+{
+}
+
 void EntityManager::Update(double delta_time)
 {
     for (auto& e : entities) e->Update(delta_time);
@@ -48,22 +52,4 @@ bool Entity::IsAlive() const
 void Entity::Destroy()
 {
     this->is_alive = false;
-}
-
-// TEST COMPONENTS
-
-void CounterComponent::Update(double delta_time)
-{
-    counter += delta_time;
-    SDL_Log("Counter: %f", counter);
-}
-
-void KillComponent::Init()
-{
-    cCounter = &entity->GetComponent<CounterComponent>();
-}
-
-void KillComponent::Update(double delta_time)
-{
-    if (cCounter->counter >= 2) entity->Destroy();
 }

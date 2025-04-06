@@ -33,13 +33,12 @@ template <typename T> inline auto GetComponentTypeID() -> ComponentTypeID {
 	return component_type_id;
 };
 
-
 class Component
 {
 public:
 	// Methods
 	Component() = default;
-    virtual ~Component() {};
+    virtual ~Component() = default;
 
     virtual void Init() {};
     virtual void Update(double delta_time) {};
@@ -75,43 +74,26 @@ private:
     bool is_alive = true;
 
     std::vector<std::unique_ptr<Component>> components;
-    ComponentArray component_array;
-    ComponentBitset component_bitset;
+    ComponentArray component_array = { 0 };
+    ComponentBitset component_bitset = { 0 };
 };
 
 class EntityManager
 {
-private:
-    std::vector<std::unique_ptr<Entity>> entities;
-
 public:
+    EntityManager() = default;
+    ~EntityManager();
+
     void Update(double delta_time);;
     void Render();
 
     void Refresh();
 
     Entity& CreateEntity();
+
+private:
+    std::vector<std::unique_ptr<Entity>> entities;
 };
-
-
-// TEST Components
-class CounterComponent: public Component
-{
-public:
-	double counter = 0.0;
-    void Update(double delta_time) override;
-};
-
-class KillComponent : public Component
-{
-public:
-	CounterComponent* cCounter = nullptr;
-
-    void Init() override;
-    void Update(double delta_time) override;
-};
-
-
 
 
 template<typename T>
@@ -123,7 +105,7 @@ template<typename T, typename ...TArgs>
 T& Entity::AddComponent(TArgs && ...mArgs) {
     assert(!HasComponent<T>());
 
-    T* c = new T(std::forward<TArgs>(mArgs)...);
+    T* c = new T(std::forward<TArgs>(mArgs)...); // ћожно попробовать передавать entity как аргумент, а потом вызывать конструктор Component(entity) дл€ установки c->entity = entity;
     c->entity = this;
     std::unique_ptr<Component> uPtr{ c };
     components.emplace_back(std::move(uPtr));

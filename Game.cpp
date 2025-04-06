@@ -1,29 +1,18 @@
 #include "Game.h"
 #include "SDL3_image/SDL_image.h"
 #include "Sprite.h"
-#include "ECS.h"
-
-Sprite* test_sprite;
+#include "ECS/Components/Components.h"
 
 SDL_Renderer* Game::renderer = nullptr;
 EntityManager* Game::entity_manager = nullptr;
 
 Game::Game()
 {
-	this->entity_manager = new EntityManager();
 
-	Entity& entity = entity_manager->CreateEntity();
-	SDL_Log("Entity is alive: %d", entity.IsAlive());
-	SDL_Log("CounterComponent_ID: %d", GetComponentTypeID<CounterComponent>());
-	SDL_Log("KillComponent_ID: %d", GetComponentTypeID<KillComponent>());
-	
-	entity.AddComponent<CounterComponent>();
-	entity.AddComponent<KillComponent>();
 }
 
 Game::~Game()
 {
-	delete this->entity_manager;
 }
 
 bool Game::Init(const char* window_title, const int xpos, const int ypos, const int width, const int height)
@@ -36,7 +25,7 @@ bool Game::Init(const char* window_title, const int xpos, const int ypos, const 
 	}
 	SDL_Log("SDL subsystems initialized!");
 
-	SDL_Window* window = SDL_CreateWindow(window_title, width, height, SDL_WINDOW_ALWAYS_ON_TOP);
+	SDL_Window* window = SDL_CreateWindow(window_title, width, height, NULL);
 	if (window == nullptr) {
 		SDL_Log("SDL_CreateWindow error: %s", SDL_GetError());
 		return false;
@@ -53,9 +42,17 @@ bool Game::Init(const char* window_title, const int xpos, const int ypos, const 
 	SDL_SetWindowPosition(window, xpos, ypos);
 	this->is_running = true;
 
-	test_sprite = new Sprite("./Assets/Sprites/CharactersSpritesheet.png", { 32 * 6, 32 * 6, 32, 32 });
-	test_sprite->SetScale(0.3);
+	// ECS setup	START
+	this->entity_manager = new EntityManager();
 
+	Entity& entity = entity_manager->CreateEntity();
+	entity.AddComponent<TransformComponent>(32, 32);
+	entity.AddComponent<SpriteComponent>().LoadTexture("./Assets/Sprites/CharactersSpritesheet.png").SetSourceRect({32 * 6,32 * 6,32,32});
+
+	SpriteComponent& sprite_component = entity.GetComponent<SpriteComponent>();
+	sprite_component.SetScale(0.3);
+
+	// ECS setup	END
 	return true;
 }
 
@@ -78,8 +75,6 @@ void Game::SetIcon(const char* icon_path)
 
 SDL_AppResult Game::HandleEvent(SDL_Event* event)
 {
-	test_sprite->HandleEvent(event);
-
 	switch (event->type) {
 	case SDL_EVENT_QUIT:
 		return SDL_APP_SUCCESS;
@@ -105,8 +100,6 @@ SDL_AppResult Game::Update()
 	// Update all entities
 	this->entity_manager->Refresh();
 	this->entity_manager->Update(this->delta_time);
-	
-	test_sprite->Update(this->delta_time);
 
 	//SDL_Log("FPS: %lf", 1/this->delta_time);
 	return SDL_APP_CONTINUE;
@@ -118,17 +111,14 @@ SDL_AppResult Game::Render()
 	SDL_RenderClear(this->renderer);
 
 	this->entity_manager->Render();
-	test_sprite->Render();
 
 	SDL_RenderPresent(this->renderer);
-
 	return SDL_APP_CONTINUE;
 }
 
 void Game::Cleanup(SDL_AppResult result)
 {
-	delete test_sprite;
-
+	delete entity_manager;
 	this->is_running = false;
 
 	SDL_DestroyRenderer(this->renderer);
